@@ -1,7 +1,17 @@
 import { Hono } from "hono";
 import { auth } from "./lib/better-auth";
+import { cors } from "hono/cors";
 
 const app = new Hono<{ Bindings: CloudflareBindings }>();
+
+const corsOptions = {
+  origin: ["http://localhost:5173", "http://127.0.0.1:8787"],
+  credentials: true,
+  allowHeaders: ["Authorization", "Content-Type"],
+  allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+};
+
+app.use("*", cors(corsOptions));
 
 app.get("/", (c) => {
   return c.text("Hello world from hono");
